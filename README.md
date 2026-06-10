@@ -1,3 +1,4 @@
+INVESTIGACIONES:
 Listar (index):
 
 curl -i -X GET http://localhost:8000/api/funciones-cargos
@@ -85,21 +86,87 @@ curl -i -X DELETE http://localhost:8000/api/funciones-cargos/1
 
 
 
-Cómo ejecutar desde Bash
-Entra al directorio del proyecto:
+
+
+
+HECHO POR Efrain:
+
+opcion 1:
+
+---Cómo ejecutar desde Bash Entra al directorio del proyecto:
 
 cd "c:\Users\Aprendiz\Documents\Trabajos de efrain\Luis carlos toncel\proyecto_rds"
 
-Ejecuta el login en consola:
+---Ejecuta el login en consola:
 
 php artisan login:token
 
-O pasando email y contraseña directo:
+---pasando email y contraseña directo:
 
-php artisan login:token usuario@ejemplo.com contraseña
+curl -X POST http://127.0.0.1:8000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","password":"password123"}'
 
-Ejemplo de uso del token en API
-Una vez que obtengas el token:
 
+---Ejemplo de uso del token en API Una vez que obtengas el token:
+
+curl -H "Authorization: Bearer TU_TOKEN_AQUI" 
+
+ejemplos de uso:
+
+[
 curl -H "Authorization: Bearer TU_TOKEN_AQUI" http://127.0.0.1:8000/api/user
 
+curl -H "Authorization: Bearer TU_TOKEN_AQUI" http://127.0.0.1:8000/api/funciones-cargos
+]
+
+El token de Sanctum se autentica para acceder a los endpoints protegidos de la API.
+
+
+
+
+
+opcion 2:
+
+
+ejecutamiento de la app:
+
+
+directorio de proyecto
+
+-cd "/c/Users/Aprendiz/Documents/Trabajos de efrain/Luis carlos toncel/proyecto_rds"
+
+
+---ejecutar un servidor
+
+-php artisan serve --host=127.0.0.1 --port=8000
+
+
+---listar
+
+-curl -i -X GET http://127.0.0.1:8000/api/funciones-cargos
+
+
+---ver por ID
+
+-curl -i -X GET http://127.0.0.1:8000/api/funciones-cargos/1
+
+
+---crear
+
+-curl -i -X POST http://127.0.0.1:8000/api/funciones-cargos \
+  -H "Content-Type: application/json" \
+  -d '{"cargo_id":1,"descripcion_funcion":"Nueva funcion","estado":true}'
+
+
+---actualizar
+
+-curl -i -X PUT http://127.0.0.1:8000/api/funciones-cargos/1 \
+  -H "Content-Type: application/json" \
+  -d '{"descripcion_funcion":"Actualizada","estado":false}'
+
+
+
+---eliminar
+
+curl -i -X DELETE http://127.0.0.1:8000/api/funciones-cargos/1
