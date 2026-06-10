@@ -21,10 +21,18 @@ Route::post('/login', function (Request $request) {
     return ['token' => $user->createToken('api-login-token')->plainTextToken];
 });
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
 
-Route::apiResource('cargos', CargoController::class);
-Route::apiResource('empleados', EmpleadoController::class);
-Route::apiResource('funciones-cargos', FuncionesCargoController::class);
+    Route::post('/logout', function (Request $request) {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json(['message' => 'Sesión cerrada correctamente.']);
+    });
+
+    Route::apiResource('cargos', CargoController::class);
+    Route::apiResource('empleados', EmpleadoController::class);
+    Route::apiResource('funciones-cargos', FuncionesCargoController::class);
+});
