@@ -22,5 +22,13 @@ class UserSeeder extends Seeder
             'password' => 'admin123',
             'email_verified_at' => now(),
         ]);
+
+        User::create([
+            'name' => 'efrain',
+            'email' => 'efra@example.com',
+            'password' => 'efraA2552',
+            'email_verified_at' => now(),
+        ]);
+         
     }
 }
