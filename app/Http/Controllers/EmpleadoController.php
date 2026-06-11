@@ -29,12 +29,14 @@ class EmpleadoController extends Controller
         return response()->json($empleado->load('cargo'), 201);
     }
 
-    public function show(Empleado $empleado)
+    public function show($id)
     {
-        return $empleado->load('cargo');
+        $emp = Empleado::with('cargo')->findOrFail($id);
+
+        return response()->json($emp->toArray());
     }
 
-    public function update(Request $request, Empleado $empleado)
+    public function update(Request $request, $id)
     {
         $data = $request->validate([
             'cargo_id' => 'sometimes|required|exists:cargos,id',
@@ -46,15 +48,22 @@ class EmpleadoController extends Controller
             'estado' => 'sometimes|required|boolean',
         ]);
 
+        $empleado = Empleado::findOrFail($id);
+
         $empleado->update($data);
 
-        return response()->json($empleado->load('cargo'));
+        $fresh = Empleado::with('cargo')->findOrFail($empleado->id);
+
+        return response()->json($fresh->toArray());
     }
 
-    public function destroy(Empleado $empleado)
+    public function destroy($id)
     {
+        $empleado = Empleado::findOrFail($id);
+
         $empleado->delete();
 
         return response()->json(null, 204);
     }
+    
 }

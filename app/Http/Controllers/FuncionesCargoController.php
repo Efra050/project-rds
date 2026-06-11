@@ -25,12 +25,14 @@ class FuncionesCargoController extends Controller
         return response()->json($funcion->load('cargo'), 201);
     }
 
-    public function show(FuncionesCargo $funcionesCargo)
+    public function show($id)
     {
-        return $funcionesCargo->load('cargo');
+        $func = FuncionesCargo::with('cargo')->findOrFail($id);
+
+        return response()->json($func->toArray());
     }
 
-    public function update(Request $request, FuncionesCargo $funcionesCargo)
+    public function update(Request $request, $id)
     {
         $data = $request->validate([
             'cargo_id' => 'sometimes|required|exists:cargos,id',
@@ -38,15 +40,22 @@ class FuncionesCargoController extends Controller
             'estado' => 'sometimes|required|boolean',
         ]);
 
+        $funcionesCargo = FuncionesCargo::findOrFail($id);
+
         $funcionesCargo->update($data);
 
-        return response()->json($funcionesCargo->load('cargo'));
+        $fresh = FuncionesCargo::with('cargo')->findOrFail($funcionesCargo->id);
+
+        return response()->json($fresh->toArray());
     }
 
-    public function destroy(FuncionesCargo $funcionesCargo)
+    public function destroy($id)
     {
+        $funcionesCargo = FuncionesCargo::findOrFail($id);
+
         $funcionesCargo->delete();
 
         return response()->json(null, 204);
     }
+    
 }

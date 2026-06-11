@@ -24,25 +24,33 @@ class CargoController extends Controller
         return response()->json($cargo, 201);
     }
 
-    public function show(Cargo $cargo)
+    public function show($id)
     {
-        return $cargo->load(['empleados', 'funcionescargos']);
+        $cargo = Cargo::with(['empleados', 'funcionescargos'])->findOrFail($id);
+
+        return response()->json($cargo->toArray());
     }
 
-    public function update(Request $request, Cargo $cargo)
+    public function update(Request $request, $id)
     {
         $data = $request->validate([
             'nombre_cargo' => 'sometimes|required|string|max:255',
             'descripcion' => 'sometimes|required|string|max:1000',
         ]);
 
+        $cargo = Cargo::findOrFail($id);
+
         $cargo->update($data);
 
-        return response()->json($cargo);
+        $fresh = Cargo::with(['empleados', 'funcionescargos'])->findOrFail($cargo->id);
+
+        return response()->json($fresh->toArray());
     }
 
-    public function destroy(Cargo $cargo)
+    public function destroy($id)
     {
+        $cargo = Cargo::findOrFail($id);
+
         $cargo->delete();
 
         return response()->json(null, 204);

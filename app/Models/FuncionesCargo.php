@@ -18,6 +18,10 @@ class FuncionesCargo extends Model
         'estado',
     ];
 
+    protected $casts = [
+        'estado' => 'boolean',
+    ];
+
     public function cargo(): BelongsTo
     {
         return $this->belongsTo(Cargo::class, 'cargo_id');

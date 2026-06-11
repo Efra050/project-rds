@@ -22,6 +22,13 @@ class Empleado extends Model
         'estado',
     ];
 
+    protected $casts = [
+        'estado' => 'boolean',
+        'salario' => 'float',
+        'fecha_nacimiento' => 'date',
+        'fecha_ingreso' => 'date',
+    ];
+
     public function cargo(): BelongsTo
     {
         return $this->belongsTo(Cargo::class, 'cargo_id');
