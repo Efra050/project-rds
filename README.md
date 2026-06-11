@@ -108,10 +108,6 @@ curl -X POST http://127.0.0.1:8000/api/login \
   -d '{"email":"test@example.com","password":"password123"}'
 
 
----Ejemplo de uso del token en API Una vez que obtengas el token:
-
-curl -H "Authorization: Bearer TU_TOKEN_AQUI" 
-
 ejemplos de uso:
 
 [
@@ -139,7 +135,7 @@ directorio de proyecto
 
 ---ejecutar un servidor
 
--php artisan serve --host=127.0.0.1 --port=8000
+-php artisan serve 
 
 
 ---listar
@@ -170,3 +166,5 @@ directorio de proyecto
 ---eliminar
 
 curl -i -X DELETE http://127.0.0.1:8000/api/funciones-cargos/1
+
+

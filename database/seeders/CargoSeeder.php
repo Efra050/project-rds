@@ -12,6 +12,6 @@ class CargoSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        \App\Models\Cargo::factory(40)->create();
     }
 }
