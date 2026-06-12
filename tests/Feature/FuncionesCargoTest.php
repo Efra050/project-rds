@@ -11,7 +11,7 @@ class FuncionesCargoTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_index_returns_funciones_with_cargo(): void
+    public function test_devuelve_funciones_con_carga(): void
     {
         $cargo = Cargo::create(['nombre_cargo' => 'Prueba', 'descripcion' => 'Desc']);
 
@@ -28,13 +28,13 @@ class FuncionesCargoTest extends TestCase
             ->assertJsonFragment(['descripcion_funcion' => 'Hacer pruebas']);
     }
 
-    public function test_store_requires_fields_and_creates_resource(): void
+    public function test_campos_y_crea_recursos(): void
     {
-        // validation errors when payload empty
+        // Errores de validación cuando la carga útil está vacía
         $this->postJson('/api/funciones-cargos', [])->assertStatus(422)
             ->assertJsonValidationErrors(['cargo_id', 'descripcion_funcion', 'estado']);
 
-        // create with valid payload
+        // crear con carga útil válida
         $cargo = Cargo::create(['nombre_cargo' => 'Otro', 'descripcion' => 'Desc']);
 
         $payload = [
@@ -51,7 +51,7 @@ class FuncionesCargoTest extends TestCase
         $this->assertDatabaseHas('funciones_cargos', ['descripcion_funcion' => 'Nueva función']);
     }
 
-    public function test_show_update_and_delete_behaviour(): void
+    public function test_mostrar_actualizacion_y_eliminacion(): void
     {
         $cargo = Cargo::create(['nombre_cargo' => 'C', 'descripcion' => 'D']);
 
@@ -61,24 +61,20 @@ class FuncionesCargoTest extends TestCase
             'estado' => true,
         ]);
 
-        // show
         $this->getJson("/api/funciones-cargos/{$funcion->id}")
             ->assertStatus(200)
             ->assertJsonFragment(['descripcion_funcion' => 'Inicial']);
 
-        // invalid update (wrong estado type)
         $this->putJson("/api/funciones-cargos/{$funcion->id}", ['estado' => 'notbool'])
             ->assertStatus(422)
             ->assertJsonValidationErrors(['estado']);
 
-        // valid update
         $this->putJson("/api/funciones-cargos/{$funcion->id}", ['descripcion_funcion' => 'Modificada', 'estado' => false])
             ->assertStatus(200)
             ->assertJsonFragment(['descripcion_funcion' => 'Modificada', 'estado' => false]);
 
         $this->assertDatabaseHas('funciones_cargos', ['id' => $funcion->id, 'descripcion_funcion' => 'Modificada']);
 
-        // delete
         $this->deleteJson("/api/funciones-cargos/{$funcion->id}")->assertStatus(204);
 
         $this->assertDatabaseMissing('funciones_cargos', ['id' => $funcion->id]);

@@ -10,7 +10,7 @@ class CargoTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_index_returns_cargos_with_relations(): void
+    public function test_devuelve_cargamentos_con_relaciones(): void
     {
         $cargo = Cargo::create(['nombre_cargo' => 'Dev', 'descripcion' => 'Desarrollador']);
 
@@ -21,7 +21,7 @@ class CargoTest extends TestCase
             ->assertJsonFragment(['nombre_cargo' => 'Dev']);
     }
 
-    public function test_store_requires_fields_and_creates_resource(): void
+    public function test_campos_y_crea_recursos(): void
     {
         $this->postJson('/api/cargos', [])->assertStatus(422)
             ->assertJsonValidationErrors(['nombre_cargo', 'descripcion']);
@@ -36,7 +36,7 @@ class CargoTest extends TestCase
         $this->assertDatabaseHas('cargos', ['nombre_cargo' => 'QA']);
     }
 
-    public function test_show_update_and_delete_behaviour(): void
+    public function test_muestra_actualizacion_y_eliminacion(): void
     {
         $cargo = Cargo::create(['nombre_cargo' => 'Ops', 'descripcion' => 'Ops desc']);
 

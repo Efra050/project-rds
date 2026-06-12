@@ -11,7 +11,7 @@ class EmpleadoTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_index_returns_empleados_with_cargo(): void
+    public function test_rendimientos_de_indice_de_empleados(): void
     {
         $cargo = Cargo::create(['nombre_cargo' => 'Dev', 'descripcion' => 'Desc']);
 
@@ -30,7 +30,7 @@ class EmpleadoTest extends TestCase
             ->assertJsonStructure(['*' => ['id', 'cargo_id', 'nombre', 'apellido', 'fecha_nacimiento', 'fecha_ingreso', 'salario', 'estado', 'cargo']]);
     }
 
-    public function test_store_requires_fields_and_creates_resource(): void
+    public function test_campos_y_crea_recursos(): void
     {
         $this->postJson('/api/empleados', [])->assertStatus(422)
             ->assertJsonValidationErrors(['cargo_id', 'nombre', 'apellido', 'fecha_nacimiento', 'fecha_ingreso', 'salario', 'estado']);
@@ -54,7 +54,7 @@ class EmpleadoTest extends TestCase
         $this->assertDatabaseHas('empleados', ['nombre' => 'Ana', 'apellido' => 'Gomez']);
     }
 
-    public function test_show_update_and_delete_behaviour(): void
+    public function test_Comportamiento_de_actualizacion_y_eliminacion(): void
     {
         $cargo = Cargo::create(['nombre_cargo' => 'C', 'descripcion' => 'D']);
 
