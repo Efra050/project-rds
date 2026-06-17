@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
         return response()->json(['message' => 'Sesión cerrada correctamente.']);
     });
 
+    Route::apiResource('users', \App\Http\Controllers\UserController::class);
     Route::apiResource('cargos', CargoController::class);
     Route::apiResource('empleados', EmpleadoController::class);
     Route::apiResource('funciones-cargos', FuncionesCargoController::class);
