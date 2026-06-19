@@ -9,10 +9,12 @@ class FuncionesCargoController extends Controller
 {
     public function index(Request $request)
     {
-        $perPage = $request->query('per_page', 15);
+        $perPage = $request->query('per_page', 10);
         $page = $request->query('page');
 
-        return FuncionesCargo::paginateWithCargo((int) $perPage, $page ? (int) $page : null);
+        $funcionesCargo = FuncionesCargo::paginateWithCargo((int) $perPage, $page ? (int) $page : null);
+
+        return response()->json($funcionesCargo, 200);
     }
 
     public function store(Request $request)

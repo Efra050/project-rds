@@ -9,10 +9,16 @@ class CargoController extends Controller
 {
     public function index(Request $request)
     {
-        $perPage = $request->query('per_page', 15);
+        $perPage = $request->query('per_page', 10);
         $page = $request->query('page');
 
-        return Cargo::paginateWithRelations((int) $perPage, $page ? (int) $page : null);
+        $cargo = Cargo::paginateWithRelations((int) $perPage, $page ? (int) $page : null);
+
+        if ($cargo->isEmpty()) {
+            return response()->json(['message' => 'No hay cargos disponibles en esta pagina'],'404');
+        }
+
+        return response()->json($cargo, 200);
     }
 
     public function store(Request $request)

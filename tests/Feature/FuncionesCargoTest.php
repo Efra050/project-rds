@@ -21,10 +21,26 @@ class FuncionesCargoTest extends TestCase
             'estado' => true,
         ]);
 
-        $response = $this->getJson('/api/funciones-cargos');
+        $response = $this->getJson('/api/funciones-cargos?per_page=10&page=1');
 
         $response->assertStatus(200)
-            ->assertJsonStructure(['*' => ['id', 'cargo_id', 'descripcion_funcion', 'estado', 'cargo']])
+            ->assertJsonStructure([
+                'current_page',
+                'data' => [
+                    '*' => ['id', 'cargo_id', 'descripcion_funcion', 'estado', 'cargo'],
+                ],
+                'first_page_url',
+                'from',
+                'last_page',
+                'last_page_url',
+                'links',
+                'next_page_url',
+                'path',
+                'per_page',
+                'prev_page_url',
+                'to',
+                'total',
+            ])
             ->assertJsonFragment(['descripcion_funcion' => 'Hacer pruebas']);
     }
 

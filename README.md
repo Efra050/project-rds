@@ -22,7 +22,8 @@ composer install
 cp .env.example .env
 php artisan key:generate
 
-Configura tu base de datos en .env:
+Configura tu base de datos en .env :
+(en caso de que este comentado descomenta y ajusta los valores)
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -136,6 +137,11 @@ curl -H "Authorization: Bearer TU_TOKEN_AQUI" http://127.0.0.1:8000/api/user
 bash
 curl -H "Authorization: Bearer TU_TOKEN_AQUI" http://127.0.0.1:8000/api/users
 
+listar con paginado:
+bash
+curl -H "Authorization: Bearer TU_TOKEN_AQUI" "http://127.0.01:8000/api/users?per_page=10&page=numero_pagina"
+
+
 ### 7.4 Crear usuario
 
 bash
@@ -162,6 +168,11 @@ curl -X DELETE http://127.0.0.1:8000/api/users/1 \
 
 bash
 curl -H "Authorization: Bearer TU_TOKEN_AQUI" http://127.0.0.1:8000/api/cargos
+
+listar con paginado:
+bash
+curl -H "Authorization: Bearer TU_TOKEN_AQUI" "http://127.0.0.1:8000/api/cargos?per_page=10&page=numero_pagina"
+
 
 ### 7.8 Crear cargo
 
@@ -190,6 +201,10 @@ curl -X DELETE http://127.0.0.1:8000/api/cargos/1 \
 bash
 curl -H "Authorization: Bearer TU_TOKEN_AQUI" http://127.0.0.1:8000/api/empleados
 
+listar con paginado:
+bash
+curl -H "Authorization: Bearer TU_TOKEN_AQUI" "http://127.0.0.1:8000/api/empleados?per_page=10&page=numero_pagina"
+
 ### 7.12 Crear empleado
 
 bash
@@ -216,6 +231,10 @@ curl -X DELETE http://127.0.0.1:8000/api/empleados/1 \
 
 bash
 curl -H "Authorization: Bearer TU_TOKEN_AQUI" http://127.0.0.1:8000/api/funciones-cargos
+
+listar con paginado:
+bash
+curl -H "Authorization: Bearer TU_TOKEN_AQUI" "http://127.0.0.1:8000/api/funciones-cargos?per_page=10&page=numero_pagina"
 
 ### 7.16 Crear función de cargo
 

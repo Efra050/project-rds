@@ -9,13 +9,13 @@ class EmpleadoController extends Controller
 {
     public function index(Request $request)
     {
-        $perPage = $request->query('per_page', 15);
+        $perPage = $request->query('per_page', 10);
         $page = $request->query('page');
 
         $empleado = Empleado::paginateWithCargo((int) $perPage, $page ? (int) $page : null);
 
         if ($empleado->isEmpty()) {
-            return response()->json(['message' => 'no hay empleados disponibles']);
+            return response()->json(['message' => 'No hay empleados disponibles en esta pagina'], 404);
         }
 
         return response()->json($empleado, 200);
