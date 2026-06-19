@@ -7,9 +7,18 @@ use Illuminate\Http\Request;
 
 class EmpleadoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Empleado::with('cargo')->get();
+        $perPage = $request->query('per_page', 15);
+        $page = $request->query('page');
+
+        $empleado = Empleado::paginateWithCargo((int) $perPage, $page ? (int) $page : null);
+
+        if ($empleado->isEmpty()) {
+            return response()->json(['message' => 'no hay empleados disponibles']);
+        }
+
+        return response()->json($empleado, 200);
     }
 
     public function store(Request $request)

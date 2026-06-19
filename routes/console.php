@@ -28,4 +28,20 @@ Artisan::command('login:token {email?} {password?}', function (string $email = n
 
     return 0;
 })->purpose('Login with email/password and print a Sanctum API token');
- 
+
+use App\Models\Empleado;
+
+Artisan::command('empleados:paginar {page=1} {perPage=5}', function (int $page, int $perPage) {
+    $paginator = Empleado::with('cargo')->paginate($perPage, ['*'], 'page', $page);
+
+    $this->info("Página {$paginator->currentPage()} de {$paginator->lastPage()}");
+    $this->info("Total de empleados: {$paginator->total()}");
+    $this->info("Mostrando {$paginator->count()} registros de {$paginator->perPage()} por página");
+    $this->line('');
+
+    foreach ($paginator->items() as $empleado) {
+        $this->line("[{$empleado->id}] {$empleado->nombre} {$empleado->apellido} - Cargo: {$empleado->cargo?->nombre} - Salario: {$empleado->salario}");
+    }
+
+    return 0;
+})->purpose('Muestra empleados paginados desde la consola'); 

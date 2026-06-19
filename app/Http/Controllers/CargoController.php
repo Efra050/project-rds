@@ -7,9 +7,12 @@ use Illuminate\Http\Request;
 
 class CargoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Cargo::with(['empleados', 'funcionescargos'])->get();
+        $perPage = $request->query('per_page', 15);
+        $page = $request->query('page');
+
+        return Cargo::paginateWithRelations((int) $perPage, $page ? (int) $page : null);
     }
 
     public function store(Request $request)

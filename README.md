@@ -1,258 +1,265 @@
-﻿Requisitos del equipo Para usar este proyecto:
+﻿# proyecto_rds
 
- * PHP 8.4.22 o superior
- * Composer 2.8.10 o superior, para instalar dependencias de Laravel
- * Node.js y npm
- * MySQL 8.0 o superior, para la base de datos
- * curl, para probar los endpoints de la API desde la terminal
- * Laravel 13.14.0
- * Laravel Sanctum 3.2.0, para autenticación de API
- > Este proyecto usa Laravel 13.8 y Laravel Sanctum para autenticación de API.
+## 1. Requisitos
 
-## 2. Instalación básica
+Para usar este proyecto necesitas:
 
-Desde la carpeta del proyecto
+* PHP 8.4 o superior
+* Composer 2.8 o superior
+* MySQL 8.0 o superior
+* Node.js y npm 
+* curl para probar la API desde la terminal
+* Laravel 13.x
+* Laravel Sanctum para autenticación de API
 
-bash: 
- * git clone https://github.com/Efra050/project-rds.git
- * cd "proyecto_rds"
- * composer install
- * cp .env.example .env
- * php artisan key:generate
+## 2. Instalación
 
-
-Configura tu base de datos en el archivo .env:
-* DB_CONNECTION=mysql
-* DB_HOST=127.0.0.1
-* DB_PORT=3306
-* DB_DATABASE=db_3066552
-* DB_USERNAME=root
-* DB_PASSWORD=0000
-
-
-Luego ejecuta migraciones:
-
-bash: 
-* php artisan migrate:fresh --seed
-* php artisan migrate
-
-
-Si quieres usar los scripts de frontend o pruebas locales también puedes instalar dependencias de Node:
+Desde la carpeta del proyecto, ejecuta:
 
 bash:
-* npm install
-* npm run build
 
+composer install
+cp .env.example .env
+php artisan key:generate
 
-## 3. Iniciar el servidor
+Configura tu base de datos en .env:
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=db_3066552
+DB_USERNAME=root
+DB_PASSWORD=(contraseña de tu MySQL)
+
+Luego ejecuta las migraciones y los seeders:
+
+bash
+php artisan migrate:fresh --seed
+php artisan migrate
+
+Si necesitas assets o pruebas de Node, instala dependencias de frontend:
 
 bash:
+
+npm install
+npm run build
+
+## 3. Ejecutar el servidor
+
+Inicia Laravel con:
+
+bash
 php artisan serve
- 
+
 El servidor se ejecutará en:
 
-- http://127.0.0.1:8000
+* http://127.0.0.1:8000
 
+## 4. Autenticación con Sanctum
 
+### 4.1 Obtener token
 
-## 4. Autenticación con token (Sanctum)
-
-Generar token desde la API
-Endpoint público:
-
-http POST /api/login
-
-
-Ejemplo con `curl`:
+Haz login con el endpoint público /api/login:
 
 bash:
+
 curl -X POST http://127.0.0.1:8000/api/login \
   -H "Content-Type: application/json" \
   -d '{"email":"efra@example.com","password":"efrain12345"}'
 
+Respuesta esperada:
 
-Respuesta:
-
-json:
+json
 {
   "token": "TU_TOKEN_AQUI"
 }
 
----Usar el token en las solicitudes
+### 4.2 Usar el token en Insomnia o curl
 
-Todos los endpoints protegidos requieren el encabezado:
+En Insomnia agrega el header:
 
-http
 Authorization: Bearer TU_TOKEN_AQUI
 
+Con curl:
+
+bash:
+
+curl -H "Authorization: Bearer TU_TOKEN_AQUI" http://127.0.0.1:8000/api/user
 
 ## 5. Endpoints de usuario
 
-* GET /api/user - Devuelve los datos del usuario autenticado en la sesión actual.
-* GET /api/users - Lista todos los usuarios.
+* GET /api/user - Devuelve los datos del usuario autenticado.
+* GET /api/users - Lista usuarios paginados.
 * GET /api/users/{id} - Muestra un usuario por ID.
-* POST /api/users - Crea un nuevo usuario.
-* PUT /api/users/{id} - Actualiza un usuario existente.
+* POST /api/users - Crea un usuario.
+* PUT /api/users/{id} - Actualiza un usuario.
 * DELETE /api/users/{id} - Elimina un usuario.
 
-## 6. Endpoints de recursos disponibles
+## 6. Endpoints de recursos
 
-Estos endpoints sí están disponibles y requieren token:
+Todos los siguientes endpoints requieren token:
 
- * GET /api/cargos
- * GET /api/cargos/{id}
- * POST /api/cargos
- * PUT /api/cargos/{id}
- * DELETE /api/cargos/{id}
+* GET /api/cargos
+* GET /api/cargos/{id}
+* POST /api/cargos
+* PUT /api/cargos/{id}
+* DELETE /api/cargos/{id}
 
- * GET /api/empleados
- * GET /api/empleados/{id}
- * POST /api/empleados
- * PUT /api/empleados/{id}
- * DELETE /api/empleados/{id}
+* GET /api/empleados
+* GET /api/empleados/{id}
+* POST /api/empleados
+* PUT /api/empleados/{id}
+* DELETE /api/empleados/{id}
 
- * GET /api/funciones-cargos
- * GET /api/funciones-cargos/{id}
- * POST /api/funciones-cargos
- * PUT /api/funciones-cargos/{id}
- * DELETE /api/funciones-cargos/{id}
+* GET /api/funciones-cargos
+* GET /api/funciones-cargos/{id}
+* POST /api/funciones-cargos
+* PUT /api/funciones-cargos/{id}
+* DELETE /api/funciones-cargos/{id}
 
-## 7. Ejemplos con (curl)
+## 7. Ejemplos de uso
 
----Obtener token
+### 7.1 Obtener token
 
-bash:
+bash
 curl -X POST http://127.0.0.1:8000/api/login \
   -H "Content-Type: application/json" \
   -d '{"email":"efra@example.com","password":"efrain12345"}'
 
+### 7.2 Ver usuario autenticado
 
----Ver usuario autenticado
-
-bash:
+bash
 curl -H "Authorization: Bearer TU_TOKEN_AQUI" http://127.0.0.1:8000/api/user
 
+### 7.3 Listar usuarios
 
---- Listar usuarios
-
-bash:
+bash
 curl -H "Authorization: Bearer TU_TOKEN_AQUI" http://127.0.0.1:8000/api/users
 
+### 7.4 Crear usuario
 
---- Crear usuario
-
-bash:
+bash
 curl -X POST http://127.0.0.1:8000/api/users \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TU_TOKEN_AQUI" \
   -d '{"name":"Nuevo Usuario","email":"nuevo@example.com","password":"password123"}'
 
+### 7.5 Actualizar usuario
 
---- Actualizar usuario
-
-bash:
+bash
 curl -X PUT http://127.0.0.1:8000/api/users/1 \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TU_TOKEN_AQUI" \
   -d '{"name":"Usuario Actualizado","email":"actualizado@example.com"}'
 
+### 7.6 Eliminar usuario
 
---- Eliminar usuario
-
-bash:
+bash
 curl -X DELETE http://127.0.0.1:8000/api/users/1 \
   -H "Authorization: Bearer TU_TOKEN_AQUI"
 
+### 7.7 Listar cargos
 
---- Listar cargos
-
-bash:
+bash
 curl -H "Authorization: Bearer TU_TOKEN_AQUI" http://127.0.0.1:8000/api/cargos
 
+### 7.8 Crear cargo
 
---- Crear cargo
-
-bash:
+bash
 curl -X POST http://127.0.0.1:8000/api/cargos \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TU_TOKEN_AQUI" \
   -d '{"nombre_cargo":"Gerente","descripcion":"Descripción del cargo"}'
 
+### 7.9 Actualizar cargo
 
---- Actualizar cargo
-
-bash:
+bash
 curl -X PUT http://127.0.0.1:8000/api/cargos/1 \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TU_TOKEN_AQUI" \
   -d '{"descripcion":"Descripción actualizada"}'
 
+### 7.10 Eliminar cargo
 
---- Eliminar cargo
-
-bash:
+bash
 curl -X DELETE http://127.0.0.1:8000/api/cargos/1 \
   -H "Authorization: Bearer TU_TOKEN_AQUI"
 
+### 7.11 Listar empleados
 
---- Listar empleados
-
-bash:
+bash
 curl -H "Authorization: Bearer TU_TOKEN_AQUI" http://127.0.0.1:8000/api/empleados
 
+### 7.12 Crear empleado
 
---- Crear empleado
-
-bash:
+bash
 curl -X POST http://127.0.0.1:8000/api/empleados \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TU_TOKEN_AQUI" \
   -d '{"cargo_id":1,"nombre":"Juan","apellido":"Pérez","fecha_nacimiento":"1990-01-01","fecha_ingreso":"2024-01-01","salario":1200.50,"estado":true}'
 
+### 7.13 Actualizar empleado
 
---- Actualizar empleado
-
-bash:
+bash
 curl -X PUT http://127.0.0.1:8000/api/empleados/1 \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TU_TOKEN_AQUI" \
   -d '{"salario":1300.75,"estado":false}'
 
+### 7.14 Eliminar empleado
 
---- Eliminar empleado
-
-bash:
+bash
 curl -X DELETE http://127.0.0.1:8000/api/empleados/1 \
   -H "Authorization: Bearer TU_TOKEN_AQUI"
 
-
---- Listar funciones de cargo
+### 7.15 Listar funciones de cargo
 
 bash
 curl -H "Authorization: Bearer TU_TOKEN_AQUI" http://127.0.0.1:8000/api/funciones-cargos
 
+### 7.16 Crear función de cargo
 
---- Crear función de cargo
-
-bash:
+bash
 curl -X POST http://127.0.0.1:8000/api/funciones-cargos \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TU_TOKEN_AQUI" \
   -d '{"cargo_id":1,"descripcion_funcion":"Nueva función","estado":true}'
 
+### 7.17 Actualizar función de cargo
 
---- Actualizar función de cargo
-
-bash:
+bash
 curl -X PUT http://127.0.0.1:8000/api/funciones-cargos/1 \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer TU_TOKEN_AQUI" \
   -d '{"descripcion_funcion":"Función actualizada","estado":false}'
 
+### 7.18 Eliminar función de cargo
 
---- Eliminar función de cargo
-
-bash:
+bash
 curl -X DELETE http://127.0.0.1:8000/api/funciones-cargos/1 \
   -H "Authorization: Bearer TU_TOKEN_AQUI"
+
+## 8. Insomnia
+
+En Insomnia usa los mismos endpoints y configura la cabecera:
+
+Authorization: Bearer TU_TOKEN_AQUI
+
+Para las peticiones POST o PUT selecciona el tipo JSON y envía el cuerpo como JSON.
+
+## 9. Paginación
+
+Los listados admiten paginación mediante query params:
+
+* ?per_page=15
+* ?page=2
+
+Ejemplo:
+
+bash
+curl -H "Authorization: Bearer TU_TOKEN_AQUI" http://127.0.0.1:8000/api/empleados?per_page=10&page=2
+
+
+
+
 

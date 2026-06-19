@@ -30,4 +30,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public static function paginateSimple(int $perPage = 15, ?int $page = null)
+    {
+        return static::paginate($perPage, ['*'], 'page', $page);
+    }
 }

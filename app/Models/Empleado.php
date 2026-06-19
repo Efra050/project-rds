@@ -33,4 +33,9 @@ class Empleado extends Model
     {
         return $this->belongsTo(Cargo::class, 'cargo_id');
     }
+
+    public static function paginateWithCargo(int $perPage = 15, ?int $page = null)
+    {
+        return static::with('cargo')->paginate($perPage, ['*'], 'page', $page);
+    }
 }

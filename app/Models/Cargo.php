@@ -27,4 +27,9 @@ class Cargo extends Model
     {
         return $this->hasMany(FuncionesCargo::class, 'cargo_id');
     }
+
+    public static function paginateWithRelations(int $perPage = 15, ?int $page = null)
+    {
+        return static::with(['empleados', 'funcionescargos'])->paginate($perPage, ['*'], 'page', $page);
+    }
 }

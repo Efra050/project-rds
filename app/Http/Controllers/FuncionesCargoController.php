@@ -7,9 +7,12 @@ use Illuminate\Http\Request;
 
 class FuncionesCargoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return FuncionesCargo::with('cargo')->get();
+        $perPage = $request->query('per_page', 15);
+        $page = $request->query('page');
+
+        return FuncionesCargo::paginateWithCargo((int) $perPage, $page ? (int) $page : null);
     }
 
     public function store(Request $request)

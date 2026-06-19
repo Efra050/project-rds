@@ -1,49 +1,50 @@
-# Guía: Cómo usar el API con Laravel Sanctum
+# Guía práctica para usar la API con Laravel Sanctum
 
-## Problemas identificados y solucionados
+## 1. Problemas comunes y solución
 
-### 1. **Token inválido**
-- **Problema**: Usabas `TU_TOKEN_AQUI` como placeholder
-- **Solución**: Primero debes hacer login para obtener un token válido
+### 1.1 Token inválido
+- Problema: se está usando un placeholder como `TU_TOKEN_AQUI`
+- Solución: haz login primero y usa el token devuelto en `Authorization: Bearer [token]`
 
-### 2. **Servidor no ejecutándose**
-- **Problema**: El servidor Laravel no estaba corriendo en `http://127.0.0.1:8000`
-- **Solución**: Ejecutar `php artisan serve` antes de hacer las peticiones
+### 1.2 Servidor no iniciado
+- Problema: el servidor Laravel no está corriendo en `http://127.0.0.1:8000`
+- Solución: ejecuta `php artisan serve` antes de enviar peticiones
 
-### 3. **Base de datos no configurada**
-- **Problema**: Las migraciones y seeders no estaban ejecutados
-- **Solución**: 
-  - `php artisan migrate` - ejecuta las migraciones
-  - `php artisan db:seed` - ejecuta los seeders
+### 1.3 Base de datos no configurada
+- Problema: las migraciones o seeders no se han ejecutado
+- Solución:
+  - `php artisan migrate:fresh --seed`
 
-## Pasos para probar el API manualmente
+## 2. Probar la API desde la terminal
 
 ### Paso 1: Iniciar el servidor
 ```bash
 php artisan serve
 ```
 
-### Paso 2: Obtener un token (Login)
+### Paso 2: Obtener un token
 ```bash
 curl -X POST http://127.0.0.1:8000/api/login \
   -H "Content-Type: application/json" \
   -d '{"email":"test@example.com","password":"password123"}'
 ```
 
-**Respuesta esperada:**
+Respuesta esperada:
+
 ```json
 {
   "token": "2|rLNPVlcTJSL4PCGKrhsNESzkv8sdpxO3AuHIhTpm94a90ea7"
 }
 ```
 
-### Paso 3: Usar el token para acceder al usuario
+### Paso 3: Acceder con el token
 ```bash
 curl -H "Authorization: Bearer 2|rLNPVlcTJSL4PCGKrhsNESzkv8sdpxO3AuHIhTpm94a90ea7" \
   http://127.0.0.1:8000/api/user
 ```
 
-**Respuesta esperada:**
+Respuesta esperada:
+
 ```json
 {
   "id": 1,
@@ -55,28 +56,34 @@ curl -H "Authorization: Bearer 2|rLNPVlcTJSL4PCGKrhsNESzkv8sdpxO3AuHIhTpm94a90ea
 }
 ```
 
-## Usuarios de prueba disponibles
+## 3. Usuarios de ejemplo
 
 | Email | Contraseña | Rol |
 |-------|-----------|-----|
 | test@example.com | password123 | Usuario |
 | admin@example.com | admin123 | Admin |
 
-## Automatizar el proceso
+## 4. Uso con Insomnia
 
-Ejecuta el script automatizado:
+Configura el método HTTP y la URL. Agrega el header:
+
+```
+Authorization: Bearer TU_TOKEN_AQUI
+```
+
+Para POST o PUT, usa el cuerpo en formato JSON.
+
+## 5. Automatizar con script
+
+Puedes ejecutar el script de pruebas:
+
 ```bash
 bash test-api.sh
 ```
 
-Este script:
-1. Inicia el servidor Laravel
-2. Obtiene un token automáticamente
-3. Accede a `/api/user` con el token
-4. Detiene el servidor cuando termina
+## 6. Consejos finales
 
-## Puntos importantes
-
-- **Token Bearer**: Siempre incluye `Authorization: Bearer [token]` en la cabecera
-- **Content-Type**: Para POST usa `Content-Type: application/json`
-- **localhost vs 127.0.0.1**: El .env usa `APP_URL=http://localhost` pero el servidor corre en `127.0.0.1:8000`
+- Token Bearer: siempre incluye `Authorization: Bearer [token]`
+- Content-Type: usa `application/json` para POST y PUT
+- El servidor Laravel corre en `http://127.0.0.1:8000`
+- Si usas Insomnia, el endpoint es el mismo `http://127.0.0.1:8000`

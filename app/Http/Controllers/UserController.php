@@ -8,9 +8,12 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return User::all();
+        $perPage = $request->query('per_page', 15);
+        $page = $request->query('page');
+
+        return User::paginateSimple((int) $perPage, $page ? (int) $page : null);
     }
 
     public function store(Request $request)
