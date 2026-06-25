@@ -10,13 +10,18 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
+        $request->validate([
+            'per_page' => 'sometimes|integer|min:1|max:100',
+            'page' => 'sometimes|integer|min:1',
+        ]);
+
         $perPage = $request->query('per_page', 10);
         $page = $request->query('page');
 
         $users = User::paginateSimple((int) $perPage, $page ? (int) $page : null);
 
         if ($users->isEmpty()) {
-            return response()->json(['message' => 'No hay usuarios disponibles en esta pagina'], 404);
+            return response()->json(['message' => 'No hay usuarios disponibles en esta página', 'data' => []], 200);
         }
 
         return response()->json($users, 200);

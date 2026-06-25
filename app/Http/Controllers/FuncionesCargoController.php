@@ -9,10 +9,19 @@ class FuncionesCargoController extends Controller
 {
     public function index(Request $request)
     {
+        $request->validate([
+            'per_page' => 'sometimes|integer|min:1|max:100',
+            'page' => 'sometimes|integer|min:1',
+        ]);
+
         $perPage = $request->query('per_page', 10);
         $page = $request->query('page');
 
         $funcionesCargo = FuncionesCargo::paginateWithCargo((int) $perPage, $page ? (int) $page : null);
+
+        if ($funcionesCargo->isEmpty()) {
+            return response()->json(['message' => 'No hay funciones de cargo disponibles en esta página', 'data' => []], 200);
+        }
 
         return response()->json($funcionesCargo, 200);
     }
